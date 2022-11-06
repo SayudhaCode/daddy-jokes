@@ -1,6 +1,11 @@
 const button = document.getElementById('button');
 const audioElement = document.getElementById('audio');
 
+// button function
+function toggleButton() {
+	button.disabled = !button.disabled;
+}
+
 // change joke into voice
 function tellMe(joke) {
 	VoiceRSS.speech({
@@ -23,9 +28,11 @@ async function getJokes() {
 		const data = await res.json();
 		data.setup ? joke = `${data.setup} ... ${data.delivery}` : joke = data.joke;
 		tellMe(joke);
+		toggleButton();
 	} catch (err) {
 		console.log('whoops', err);
 	}
 }
 
-getJokes();
+button.addEventListener('click', getJokes);
+audioElement.addEventListener('ended', toggleButton);
